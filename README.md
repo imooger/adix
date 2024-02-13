@@ -1,0 +1,156 @@
+<div align="center"><img width="100%" src="https://raw.githubusercontent.com/imooger/adix/master/assets/adx1.png"/></div>
+
+---
+
+## _Making Data Science Fun, One Color at a Time!_
+
+
+
+
+
+# What is it?
+**adix** (Automatic Data Inspection and eXploration) simplifies Exploratory Data Analysis (EDA) with a single command `ix.eda()`. Experience a streamlined approach to uncovering insights, empowering you to focus on your data without distraction. 
+**Color customization** is at your fingertips, allowing you to tailor your analysis to your exact needs. Explore your data with confidence and efficiency, knowing that **adix** has your back every step of the way.
+
+
+![logo](https://raw.githubusercontent.com/imooger/adix/master/assets/main_fade.gif)
+
+
+# Main Features
+- **Customizable Themes** 
+  - Spruce up the **adix** environment with your own personal touch by playing with color schemes!    
+- **Eficient Cache Utilization**
+  - Experience faster load times through optimized caching mechanisms, enhancing overall system performance.  
+- **Rapid Data Insight**
+  - **adix** prioritizes swiftly showcasing crucial data insights, ensuring quick access to important information.  
+- **Automatic Type Detection**
+  - Detects numerical, categorical, and text features automatically, with the option for manual overrides when
+  necessary.
+- **Statistically Rich Summary Information:** 
+  - Unveil the intricate details of your data with a comprehensive summary, encompassing type identification, unique values, missing values, duplicate rows, the most frequent values and more. 
+  - Delve deeper into numerical data, exploring properties like min-max range, quartiles, average, median, standard deviation, variance, sum, kurtosis, skewness and more.
+- **Univariate and Bivariate Statistics Unveiled**
+    - Explore univariate and bivariate insights with adix's versatile visualization options. From bar charts to matrices, and box plots, uncover a multitude of ways to interpret and analyze your data effectively.
+
+# Installation
+The best way to install **adix** (other than from source) is to use pip:
+```
+pip install adix
+```
+
+**adix is still under development** If you encounter any data, compatibility, or installation issues, please don't hesitate to reach out!
+
+
+# Quick start
+The system is designed for rapid visualization of target values and dataset, facilitating quick analysis of target characteristics with just one function `ix.eda()`. Similar to pandas' df.describe() function, it provides extended analysis capabilities, accommodating time-series and text data for comprehensive insights.
+
+```python
+import adix as ix
+from adix.datasets import load_dataset
+
+titanic = load_dataset('titanic')
+```
+
+### 10 minutes to **adix**
+
+
+#### 1. Rendering the whole dataframe
+```python
+ix.eda(titanic)
+```
+- using _forest color theme_
+
+![whole df](https://raw.githubusercontent.com/imooger/adix/master/assets/all_var.gif)
+
+---
+#### 2. Accesing variables of specific dtype
+Render the DataFrame containing only categorical variables.
+
+```python
+ix.eda(titanic,val='categorical')
+```
+---
+#### 3. Accesing individual variables
+```python
+ix.eda(titanic,'Age')
+```
+- using _forest color theme_
+  
+![indv var](https://raw.githubusercontent.com/imooger/adix/master/assets/one_var.gif)
+
+---
+#### 4. Pandas .loc & .iloc
+An easy way to render only a part of the DataFrame you are interested in.
+
+```python
+ix.eda(titanic.loc[:10:2,['Age','Pclass','Fare'])
+```
+---
+
+#### 5. Changing theme colors
+```python
+ix.Configs.get_theme()
+...
+ix.Configs.set_theme('FOREST')
+```
+<div align="center"><img width="100%" src="https://raw.githubusercontent.com/imooger/adix/master/assets/change_c.png"/></div>
+
+---
+
+#### 6. Bivariate relationships:  numerical & numerical
+```python
+ix.eda(titanic,'Age','Fare')
+
+```
+<div align="center"><img width="100%" src="https://raw.githubusercontent.com/imooger/adix/master/assets/c_c.png"/></div>
+
+---
+
+#### 7. Bivariate relationships:  categorical & numerical
+```python
+ix.eda(titanic,'Sex','Age')
+
+
+```
+<div align="center"><img width="100%" src="https://raw.githubusercontent.com/imooger/adix/master/assets/cat_c.png"/></div>
+
+---
+
+#### 8. Bivariate relationships:  categorical & categorical
+```python
+ix.eda(titanic,'Sex','Survived')
+
+```
+<div align="center"><img width="100%" src="https://raw.githubusercontent.com/imooger/adix/master/assets/cat_cat.png"/></div>
+
+
+
+
+
+## License
+
+MIT
+
+**Free Software, Hell Yeah!**
+
+
+## Development
+
+**adix** was created and is maintained by Marek Jindrich, a Harvard's CS50 alumnus, and is under continuous development ever since.
+Contributions are welcome, so feel free to contact him, open an issue, or submit a pull request!
+
+For accessing the codebase or reporting bugs, please visit the GitHub repository.
+
+This program is provided with WITHOUT ANY WARRANTY. **ADIX** is still under heavy development and there might be hidden bugs.
+
+
+## Acknowledgement
+
+The goal for **adix** is to make valuable information and visualization readily available in a user friendly environment at the click of a mouse, without reinventing the wheel. All of the libraries stated below are powerful and excellent alternatives to adix. Several functions of **adix** were inspired from the following:
+
+- [Sweetviz](https://github.com/fbdesignpro/sweetviz) : The inception of this project found inspiration from Sweetviz, particularly its concept of consolidating all data in one place and using the blocks for individual features.
+- [Dataprep](https://github.com/sfu-db/dataprep/tree/develop) : Dataprep stands out as an excellent library for data preparation, and certain structural elements of adix have been inspired by it.
+- [Pandas-Profiling](https://github.com/ydataai/ydata-profiling) : Alerts served as inspiration for a segment of the dashboard's design, contributing to its functionality and user-friendly features."
+- [Kaggle](https://kaggle.com) source of Titanic dataset
+
+
