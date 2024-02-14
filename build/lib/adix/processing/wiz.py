@@ -20,20 +20,12 @@ from .tables import *
 
 """""" # NEW IMPORTS
 from nltk.tokenize import word_tokenize
-import nltk
-
-if not nltk.downloader.Downloader().is_installed('punkt'):
-    # If not, download the 'punkt' package
-    nltk.download('punkt')
-else:
-    pass
-    #print("Package 'punkt' is already downloaded.")
 """"""
 
 
 """
 This module implements the visualization for the plot(df) function.
-"""  
+"""
 
 
         
@@ -143,7 +135,7 @@ def kde_plot(data):
         plt.close(fig_kde)
 
         return image_kde
-#axxx    cfg['mini_hist_color']    
+#axxx    cfg['mini_hist_color']
 def qq_plot(data, cfg):
     # Exclude NaN values
     data_non_nan = data.dropna()
@@ -246,7 +238,7 @@ def bar_chart(data):
 ###########################################################################################################################
 
 """BIVARIATE"""
-# #axxx
+
 
 
 
@@ -259,9 +251,9 @@ def scatter_plot(x, y):
     sns.scatterplot(x='X', y='Y', data=df, color='coral', alpha=0.6, ax=ax_scatter)
 
     # Set plot title and labels
-    ax_scatter.set_title('Scatter Plot', color='#a9a9a9')
-    ax_scatter.set_xlabel('X', color='#a9a9a9')
-    ax_scatter.set_ylabel('Y', color='#a9a9a9')
+    ax_scatter.set_title(f"{x.name} vs {y.name}", color='#a9a9a9')
+    ax_scatter.set_xlabel(x.name, color='#a9a9a9')
+    ax_scatter.set_ylabel(y.name, color='#a9a9a9')
 
     # Add grid
     ax_scatter.grid(color='#a9a9a9', linestyle='dashed', linewidth=0.5)
@@ -288,9 +280,9 @@ def hexbin_plot(x, y):
     hb = ax_hexbin.hexbin(x, y, gridsize=30, cmap='Blues')
 
     # Set plot title and labels
-    ax_hexbin.set_title('Hexbin Plot', color='#a9a9a9')
-    ax_hexbin.set_xlabel('X', color='#a9a9a9')
-    ax_hexbin.set_ylabel('Y', color='#a9a9a9')
+    ax_hexbin.set_title(f"{x.name} vs {y.name}", color='#a9a9a9')
+    ax_hexbin.set_xlabel(x.name, color='#a9a9a9')
+    ax_hexbin.set_ylabel(y.name, color='#a9a9a9')
 
     # Add colorbar
     cbar = plt.colorbar(hb)
@@ -397,10 +389,10 @@ def box_plot_con(x, y):
 
     # Create a box plot
     fig_box, ax_box = plt.subplots(figsize=(8, 6))
-    sns.boxplot(x='X', y='Y', data=df, hue='X', palette='Set3', ax=ax_box, dodge='Auto', legend=False)
+    sns.boxplot(x='X', y='Y', data=df, hue='X', palette='Set3', ax=ax_box, dodge=False, legend=True)
 
     # Set plot title and labels
-    ax_box.set_title('Box Plot', color='#a9a9a9')
+    ax_box.set_title(f"{x.name} vs {y.name}", color='#a9a9a9')
     ax_box.set_xlabel(x.name, color='#a9a9a9')
     ax_box.set_ylabel(y.name, color='#a9a9a9')
 
@@ -425,6 +417,10 @@ def box_plot_con(x, y):
     ax_box.spines['left'].set_color('#d3d3d3')
     ax_box.spines['right'].set_color('#d3d3d3')
 
+    # Set font color for legend
+    legend = ax_box.legend(title=y.name)
+    legend.get_title().set_color('#a9a9a9')
+
     # Save figure to a buffer
     buffer_box = BytesIO()
     fig_box.savefig(buffer_box, format='png')
@@ -442,7 +438,7 @@ def violin_plot(x, y):
     sns.violinplot(x='X', y='Y', data=df, hue='X', palette='Set3', ax=ax_violin, inner='quartile', split=False, legend=False)
 
     # Set plot title and labels
-    ax_violin.set_title('Violin Plot', color='#a9a9a9')
+    ax_violin.set_title(f"{x.name} vs {y.name}", color='#a9a9a9')
     ax_violin.set_xlabel(x.name, color='#a9a9a9')
     ax_violin.set_ylabel(y.name, color='#a9a9a9')
 
@@ -523,9 +519,19 @@ def heatmap_plot(x, y):
     # Create a heatmap
     plt.figure(figsize=(8, 6))
     sns.heatmap(pivot_table, annot=True, cmap='YlGnBu', fmt='g')
-    plt.title('Heatmap Plot')
-    plt.xlabel('X')
-    plt.ylabel('Y')
+
+    # Set font color for axis labels and title
+    plt.title('Heatmap Plot', color='#a9a9a9')
+    plt.xlabel((x.name).upper(), color='#a9a9a9')
+    plt.ylabel((y.name).upper(), color='#a9a9a9')
+
+    # Set font color for annotation text
+    # for text in plt.gca().texts:
+    #     text.set_color('#a9a9a9')
+
+    # Set font color for ticks
+    plt.xticks(color='#a9a9a9')
+    plt.yticks(color='#a9a9a9')
 
     # Save figure to a buffer
     buffer_heatmap = BytesIO()
@@ -535,15 +541,20 @@ def heatmap_plot(x, y):
 
     return image_heatmap
 
+    
+
 def stacked_bar_chart_percentage(x, y, width, height):
     # Create a DataFrame from the categorical variables
-    df = pd.DataFrame({'X': x, 'Y': y})
+    df = pd.DataFrame({'x': x, 'y': y})
 
     # Create a cross-tabulation
-    cross_tab = pd.crosstab(df['X'], df['Y'])
+    cross_tab = pd.crosstab(df['x'], df['y'])
 
     # Normalize the data to get percentages
     cross_tab_percentage = cross_tab.div(cross_tab.sum(axis=1), axis=0) * 100
+
+    # Convert index to strings if they are integers
+    cross_tab_percentage.index = cross_tab_percentage.index.astype(str)
 
     # Crop x-axis ticks if longer than 20 symbols
     labels = [text if len(text) <= 10 else text[:10] + '...' for text in cross_tab_percentage.index]
@@ -563,16 +574,12 @@ def stacked_bar_chart_percentage(x, y, width, height):
     for spine in ax.spines.values():
         spine.set_edgecolor('#d3d3d3')
 
-    # ax.xaxis.grid(color='#a9a9a9', linestyle='dashed', linewidth=0.5)
-    # ax.yaxis.grid(color='#a9a9a9', linestyle='dashed', linewidth=0.5)
-    #plt.grid('minor')
-
     ax.set_title('Stacked Bar Chart (Percentage)', color='#a9a9a9')
-    ax.set_xlabel('')
+    ax.set_xlabel(x.name, color='#a9a9a9')
     ax.set_ylabel('Percentage', color='#a9a9a9')
 
     # Set font color for legend
-    legend = ax.legend(title='Y')
+    legend = ax.legend(title=y.name)
     legend.get_title().set_color('#a9a9a9')
 
     # Save figure to a buffer
@@ -582,6 +589,58 @@ def stacked_bar_chart_percentage(x, y, width, height):
     plt.close()
 
     return image_stacked_bar_percentage
+
+
+
+
+
+# def stacked_bar_chart_percentage(x, y, width, height):
+#     # Create a DataFrame from the categorical variables
+#     df = pd.DataFrame({'X': x, 'Y': y})
+
+#     # Create a cross-tabulation
+#     cross_tab = pd.crosstab(df['X'], df['Y'])
+
+#     # Normalize the data to get percentages
+#     cross_tab_percentage = cross_tab.div(cross_tab.sum(axis=1), axis=0) * 100
+
+#     # Crop x-axis ticks if longer than 20 symbols
+#     labels = [text if len(text) <= 10 else text[:10] + '...' for text in cross_tab_percentage.index]
+
+#     # Create a stacked bar chart with percentages
+#     fig, ax = plt.subplots(figsize=(width, height))
+#     cross_tab_percentage.plot(kind='bar', stacked=True, colormap='Set3', ax=ax)
+
+#     # Rotate x ticks 45 degrees
+#     ax.set_xticklabels(labels, ha='center', rotation=0)
+
+#     # Set font color to a9a9a9 for all text in the chart
+#     for text in ax.texts + ax.get_xticklabels() + ax.get_yticklabels():
+#         text.set_color('#a9a9a9')
+
+#     # Set frame and grid color to a9a9a9
+#     for spine in ax.spines.values():
+#         spine.set_edgecolor('#d3d3d3')
+
+#     # ax.xaxis.grid(color='#a9a9a9', linestyle='dashed', linewidth=0.5)
+#     # ax.yaxis.grid(color='#a9a9a9', linestyle='dashed', linewidth=0.5)
+#     #plt.grid('minor')
+
+#     ax.set_title('Stacked Bar Chart (Percentage)', color='#a9a9a9')
+#     ax.set_xlabel('')
+#     ax.set_ylabel('Percentage', color='#a9a9a9')
+
+#     # Set font color for legend
+#     legend = ax.legend(title='Y')
+#     legend.get_title().set_color('#a9a9a9')
+
+#     # Save figure to a buffer
+#     buffer_stacked_bar_percentage = BytesIO()
+#     fig.savefig(buffer_stacked_bar_percentage, format='png')
+#     image_stacked_bar_percentage = base64.b64encode(buffer_stacked_bar_percentage.getvalue()).decode('utf-8')
+#     plt.close()
+
+#     return image_stacked_bar_percentage
 
 
 def nested_bar_chart(x, y, width, height):
@@ -594,11 +653,11 @@ def nested_bar_chart(x, y, width, height):
 
 
     ax.set_title('Nested Bar Chart', color='#a9a9a9')
-    ax.set_xlabel('')
+    ax.set_xlabel(x.name, color='#a9a9a9')
     ax.set_ylabel('Count', color='#a9a9a9')
 
     # Set font color for legend
-    legend = ax.legend(title='Y')
+    legend = ax.legend(title=y.name)
     legend.get_title().set_color('#a9a9a9')
 
     # Crop x-axis ticks if longer than 20 symbols
@@ -1106,7 +1165,7 @@ def missing_plot(data, cfg, name=None):
     ax.legend()
     
     # Rotate the bottom ticks for better readability
-    plt.xticks(rotation=45, ha='right') 
+    plt.xticks(rotation=45, ha='right')
     
     # Adjust layout to prevent x-axis tick names from being cut out
     plt.tight_layout()
@@ -1232,39 +1291,48 @@ def triple_box(data, cfg, name=None):
 
     return image_thumb
 
+###########################################################################################################################
+######################################### CORRELATIONS ###########################################################
+###########################################################################################################################
 
+#wiz_corr
 
+def correlation_plot(corr_matrix):
+    # Create a heatmap
+    plt.figure(figsize=(8, 6))
+    heatmap = sns.heatmap(corr_matrix['data'], annot=True, cmap='YlGnBu', fmt='.2f')
 
+    # Rotate x-axis labels by 45 degrees
+    heatmap.set_xticklabels(heatmap.get_xticklabels(), rotation=45)
+
+    # Truncate x-axis tick labels if their length exceeds 8 characters
+    xticks = heatmap.get_xticklabels()
+    xtick_labels = [label.get_text() for label in xticks]  # Extract text from Text objects
+    xtick_labels = [label[:7] + '.' if len(label) > 7 else label for label in xtick_labels]
+    heatmap.set_xticklabels(xtick_labels)
+
+    # Set font color for axis labels and title
+    plt.title('Correlation', color='#a9a9a9')
+    plt.xlabel('Variables', color='#a9a9a9')
+    plt.ylabel('Variables', color='#a9a9a9')
+
+    # Set font color for ticks
+    plt.xticks(color='#a9a9a9')
+    plt.yticks(color='#a9a9a9')
+
+    # Save figure to a buffer
+    buffer_correlation = BytesIO()
+    plt.savefig(buffer_correlation, format='png')
+    image_correlation = base64.b64encode(buffer_correlation.getvalue()).decode('utf-8')
+    plt.close()
+
+    return image_correlation
     
-#data1 = { 'Categorical': data['Categorical'],
-            # 'Numeric': data['Numeric'],
-            # 'Text': data['Text'],
-            # 'Datetime': data['Datetime'],
-            #  }
+###########################################################################################################################
+######################################### WIZ ###########################################################
+###########################################################################################################################
 
-    
-
-# Number of variables 12
-# Number of observations 891
-# Missing cells 866
-# Missing cells (%) 0.97
-# Duplicate rows 0
-# Duplicate rows (%) 0.0
-# Total size in memory 85668
-# Avg. record size in memory 96.14814814814815
-# Numeric 3
-# Categorical 6
-# Text 3
-# Datetime 0
-# missing {'Age': 177, 'Cabin': 687, 'Embarked': 2}
-# unique {'PassengerId': 891, 'Name': 891}
-# constant {}
-# zero {'Survived': 549, 'SibSp': 608, 'Parch': 678, 'Fare': 15}
-# negative {}
-
-
-        
-def wiz_wrap(hub,cfg):
+def wiz_dash(hub,cfg):
     """
     Create visualizations for plot(all_df)
     """
@@ -1298,6 +1366,53 @@ def wiz_wrap(hub,cfg):
         'value_table': [None,stat_tab, None, val_tabx,None],
         
     }
+    
+    return plots
+
+def wiz_corr(hub, cfg):
+    
+    """
+    Create visualizations for correlations(df)
+    """
+
+    #print(hub)
+    store = {
+        # 'val_tab2': value_tableH(data,pic),
+        # 'val_tab':value_tableH(data,pic2,pic3),
+        'cr'  : correlation_plot(hub),
+        # 'bx': box_plot_con(col1,col2),
+        # 'lc' : line_chart(col1,col2),
+        # 'box' : box_plot(col),
+    }
+
+    plots = {
+            'type': ['a','b','c','d','e','f','g','h','i','j','k','l','m'
+            ],
+        
+            'title': [#'iq',
+                      #'Value Table',
+                      'Corr',
+                      # 'Box',
+                      # 'Line',
+                      #'Box Plot'
+                    ],
+        
+            'image': [#None,
+                      #None,
+                      ((store['cr'],800),),
+                      # ((store['bx'],800),),
+                      # ((store['lc'],800),),
+                      #store['box']
+                    ],
+        
+            'value_table': [#store['val_tab2'],
+                            #store['val_tab'],
+                            None,
+                            # None,
+                            # None,
+                            #None
+            ],
+        }
     
     return plots
 
@@ -1336,26 +1451,26 @@ def wiz_biv_cat(hub):
             ],
         
             'title': [#'iq',
-                      #'Value Table', 
-                      'HM', 
-                      'Nest', 
-                      'Stacked', 
+                      #'Value Table',
+                      'HM',
+                      'Nest',
+                      'Stacked',
                       #'Box Plot'
                     ],
         
-            'image': [#None, 
-                      #None, 
+            'image': [#None,
+                      #None,
                       ((store['hm'],800),), #800 for all
-                      ((store['nbch'],800),), 
+                      ((store['nbch'],800),),
                       ((store['sbch'],800),),
                       #store['box']
                     ],
         
             'value_table': [#store['val_tab2'],
-                            #store['val_tab'], 
-                            None, 
-                            None, 
-                            None, 
+                            #store['val_tab'],
+                            None,
+                            None,
+                            None,
                             #None
             ],
         }
@@ -1399,26 +1514,26 @@ def wiz_biv_con_cat(hub):
             ],
         
             'title': [#'iq',
-                      #'Value Table', 
-                      'Violin', 
-                      'Box', 
-                      #'Line', 
+                      #'Value Table',
+                      'Violin',
+                      'Box',
+                      #'Line',
                       #'Box Plot'
                     ],
         
-            'image': [#None, 
-                      #None, 
+            'image': [#None,
+                      #None,
                       ((store['vp'],800),),
-                      ((store['bx'],800),), 
-                      #((store['lc'],800),), 
+                      ((store['bx'],800),),
+                      #((store['lc'],800),),
                       #store['box']
                     ],
         
             'value_table': [#store['val_tab2'],
-                            #store['val_tab'], 
-                            None, 
-                            None, 
-                            #None, 
+                            #store['val_tab'],
+                            None,
+                            None,
+                            #None,
                             #None
             ],
         }
@@ -1452,31 +1567,31 @@ def wiz_biv_con(hub):
     }
 
     plots = {
-            'type': ['a','b','c','d','e','f','g','h','i','j','k','l','m' 
+            'type': ['a','b','c','d','e','f','g','h','i','j','k','l','m'
                      
             ],
         
             'title': [#'iq',
-                      #'Value Table', 
-                      'Scatter', 
-                      'Hexbin', 
-                      #'QQ Plot', 
+                      #'Value Table',
+                      'Scatter',
+                      'Hexbin',
+                      #'QQ Plot',
                       #'Box Plot'
                     ],
         
-            'image': [#None, 
-                      #None, 
-                      ((store['sc'],800),), 
-                      ((store['hx'],800),), 
+            'image': [#None,
+                      #None,
+                      ((store['sc'],800),),
+                      ((store['hx'],800),),
                       #store['qq'],
                       #store['box']
                     ],
         
             'value_table': [#store['val_tab2'],
-                            #store['val_tab'], 
-                            None, 
-                            None, 
-                            #None, 
+                            #store['val_tab'],
+                            None,
+                            None,
+                            #None,
                             #None
             ],
         }
@@ -1577,8 +1692,8 @@ def wiz_cat(hub,cfg):
     pie = pie_chart(col,cfg)
     #rad = radial_bar_chart(col,cfg)
 
-#    fake_dict = {1:'a',2:'b',3:'c',4:'d',5:'e'}
-#    data.update(fake_dict)
+    # fake_dict = {1:'a',2:'b',3:'c',4:'d',5:'e'}
+    # data.update(fake_dict)
     
     toto = tab_info(hub,cfg)
     
@@ -1659,7 +1774,7 @@ def wiz_dt(hub,cfg):
 def tab_info(hub,cfg):
 
     #print(hub)
-    name = hub["col"].name    
+    name = hub["col"].name
     col, data = hub["col"], hub["data"]
     
 
@@ -1682,7 +1797,7 @@ def tab_info(hub,cfg):
     else:
         font_sizeD = '11px'
         font_colorD = '#a9a9a9'
-        font_weightD = '300' 
+        font_weightD = '300'
 
 
     return f"""
@@ -1752,8 +1867,10 @@ def wiz(hub,cfg):
         variable_data = wiz_biv_cat(hub)
     elif hub.variable_type == "datetime":
         variable_data = wiz_dt(hub, cfg)
-    elif hub.variable_type == "wrapper":        
-        variable_data = wiz_wrap(hub, cfg)
+    elif hub.variable_type == "wrapper":
+        variable_data = wiz_dash(hub, cfg)
+    elif hub.variable_type == "correlation":
+        variable_data = wiz_corr(hub, cfg)
         
     # elif hub.variable_type == "geography_column":
     #     variable_data = render_geo(hub, cfg)

@@ -3,9 +3,9 @@ from os.path import dirname, join
 import pandas as pd
 
 
-def import_dataset(name: str or None):
+def load_dataset(name: str or None):
     """
-    Import a dataset by name or list all available datasets.
+    Load a dataset by name or list all available datasets.
     
     name = 'all' -> lists all available datasets
     name = 'titanic' -> import titanic dataset
@@ -27,7 +27,7 @@ def import_dataset(name: str or None):
         return _list_available_datasets()
     else:
         path = _get_dataset_path_by_name(name)
-        return pd.read_csv(path)
+        return pd.read_csv(path, engine='python',on_bad_lines='skip')
 
 
 def _get_dataset_path_by_name(name: str):

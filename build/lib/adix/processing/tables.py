@@ -14,7 +14,7 @@ from ..datahub import DataHub
 from ..dtype import *
 
 
-style = """                
+style = """
 .my-custom-styles body {
     font-family: Arial, sans-serif;
 }
@@ -155,7 +155,7 @@ def create_container_html(container_name, container_keys, data, cfg):
                 # If the value is a dictionary, iterate through its items and create additional table rows
                 table_rows.extend(f"<tr><td style='width: {stat_width};'>"
                                   f"<span style='color: #FF6961;'>{inner_stat}</span> has {inner_value[0]} {stat} {inner_value[1]}."
-                                  #f"</td><td style='width: {value_width}; text-align: center !important;'>{inner_value[2]} </td></tr>" # Alert 
+                                  #f"</td><td style='width: {value_width}; text-align: center !important;'>{inner_value[2]} </td></tr>" # Alert
                                   for inner_stat, inner_value in value.items())
             else:
                 # If the value is not a dictionary, create a regular table row
@@ -206,10 +206,7 @@ def create_main_html(template_title, style, containers_html, pics, cfg):
             </div>
 
             <div class="flex-container">
-                <div class="container container-800">Hello</div>
-                <div class="container">Con 2</div>
-                <div class="container">Con 2</div>
-                <div class="container">Con 2</div>
+
             </div>
             <!-- New container with bottom border -->
             <div class="container-gen" style="width: 100%; border-bottom: 1px solid #DDDFE1;"></div>

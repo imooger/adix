@@ -13,9 +13,9 @@ class WizRenderer:
     def __init__(self, data_load, variable_type, cfg):
         #print(to_render)
         """
-        {'type': ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm'], 
-        'title': [None, None, None, None], 
-        'image': [None, None, None, None], 
+        {'type': ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm'],
+        'title': [None, None, None, None],
+        'image': [None, None, None, None],
         'value_table': [None, None, None, None]}
         """
         self.cfg = cfg
@@ -37,7 +37,8 @@ class WizRenderer:
 
         /* Shared styles for tabset */
         .tabset-{{ context.unique_id }} {
-            max-width: 1118px;
+            /* max-width: 1118px; */ /* Remove this line to disable the maximum width */
+            width: 1118px; /* Add this line to enforce a fixed width */
             padding-top: 15px;
         }
 

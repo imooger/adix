@@ -148,7 +148,7 @@ class Configs:
             del cls.eda_cache[key]
 
         print(f"""Cache reset for DataFrame with shape {df.shape}\n
-                number of cache keyslen{(Configs.eda_cache.keys())}"""            
+                number of cache keyslen{(Configs.eda_cache.keys())}"""
                      )
 
 
@@ -171,12 +171,12 @@ class Configs:
         else:
             df_name = str(df)
         
-        cls.dtype = cls.dtypes_cache.get(df_name,None)   
+        cls.dtype = cls.dtypes_cache.get(df_name,None)
         
         if cls.dtype is not None:
             return cls.dtypes_cache[df_name]
         else:
-            cls.dtypes_cache[df_name] = {i: determine_variable_type(df[i])[0] for i in df.columns}       
+            cls.dtypes_cache[df_name] = {i: determine_variable_type(df[i])[0] for i in df.columns}
         return cls.dtypes_cache[df_name]
 
 

@@ -11,18 +11,21 @@ import numpy
 
 
 
-def calc(df=None, x=None, y=None, cfg=None, dtypes=None, vars=None, wrap=True):
+def calc(df=None, x=None, y=None, cfg=None, dtypes=None, vars=None, dash=True,stats=False,corr=None):
 
     """Call function based on the number of arguments (all, uni, bi)"""
-    
-    if df is not None and wrap=='only':
-        return calculate_wrapper(df, cfg, dtypes)
-    
+
+    if df is not None and dash=='only':
+        return calculate_dash(df, cfg, dtypes)
+
+    elif df is not None and corr:
+        return calculate_corr(df,cfg,vars)
+        
     elif df is not None and x is None and y is None:
-        explore_univariate(df, dtypes, vars, wrap)
+        explore_univariate(df, dtypes, vars, dash)
        
     elif df is not None and x == 'WRAPPER':
-        return calculate_wrapper(df, cfg, dtypes)
+        return calculate_dash(df, cfg, dtypes)
     
     elif x is not None and y is None:
         return calculate_univariate(df, x, cfg, dtypes)
@@ -31,7 +34,25 @@ def calc(df=None, x=None, y=None, cfg=None, dtypes=None, vars=None, wrap=True):
     else:
         raise ValueError("Invalid number of arguments")
 
-def calculate_wrapper(df, cfg, dtypes):
+def calculate_corr(df,cfg,vars):
+
+    # Filter columns by data types
+    dtypes = Configs.get_dtypes(df)
+    features = vars if vars else ['continuous']
+    #print(features)
+    selected_columns = [name for name, value in dtypes.items() if value in features]
+
+    # Select relevant columns and handle categorical variables
+    df = df[selected_columns]
+    categorical_columns = df.select_dtypes(include=['object']).columns
+    df = pd.get_dummies(df, columns=categorical_columns, drop_first=False)
+
+    # Calculate correlation matrix
+    corr_matrix = df.corr()
+
+    return DataHub(col=df, data=corr_matrix, variable_type='correlation')
+
+def calculate_dash(df, cfg, dtypes):
 
     n_obs, n_var = df.shape
     
@@ -51,22 +72,22 @@ def calculate_wrapper(df, cfg, dtypes):
     # Percentage of constant columns
     constant_columns_percentage = ((df.nunique() == 1).mean() * 100).round(1)
     
-    wrapper_data = {
+    dash_data = {
         'Number of columns': n_var,
-        'Number of rows':	n_obs,
-        'Missing cells':	nas,
-        'Missing cells (%)':	missing_percentage,
-        'Duplicate rows':	dup,
-        'Duplicate rows (%)':	unique_rows_percentage,
+        'Number of rows':    n_obs,
+        'Missing cells':    nas,
+        'Missing cells (%)':    missing_percentage,
+        'Duplicate rows':    dup,
+        'Duplicate rows (%)':    unique_rows_percentage,
         'Constant columns (%)' : constant_columns_percentage,
-        'Total memory size in KB':	np.round(df.memory_usage().sum() / 1024,2),
-        'Avg. record size in Bytes':	np.round(df.memory_usage().sum() / n_obs,2),
+        'Total memory size in KB':    np.round(df.memory_usage().sum() / 1024,2),
+        'Avg. record size in Bytes':    np.round(df.memory_usage().sum() / n_obs,2),
 
         #'Variable types'
     
-        'Numeric':	sum(value == 'continuous' for value in dtx.values()),
-        'Categorical':	sum(value == 'categorical' for value in dtx.values()),
-        'Text':	sum(value == 'text' for value in dtx.values()),
+        'Numeric':    sum(value == 'continuous' for value in dtx.values()),
+        'Categorical':    sum(value == 'categorical' for value in dtx.values()),
+        'Text':    sum(value == 'text' for value in dtx.values()),
         'Datetime': sum(value == 'datetime' for value in dtx.values()),
 
         ## WITH %%  find alert and add % at the end of -> !important;'>{inner_value[2]} %</td></tr>"
@@ -84,15 +105,15 @@ def calculate_wrapper(df, cfg, dtypes):
         'zero': {col: [(df[col] == 0).sum(),'values',] for col in df.columns if (df[col] == 0).any()},
         'negative': {col: [(df[col] < 0).sum(),'values',] for col in df.columns if pd.api.types.is_numeric_dtype(df[col]) and (df[col] < 0).any()}
     }
-    #print(wrapper_data)    
-    return DataHub(col=df, data=wrapper_data, variable_type='wrapper')
+    #print(dash_data)
+    return DataHub(col=df, data=dash_data, variable_type='wrapper')
     
 
-def explore_univariate(df, dtypes, vars=None, wrap=True):
+def explore_univariate(df, dtypes, vars=None, dash=True):
     """Explore univariate analysis for all columns"""
     from .. import eda
             
-    cal_columns = df.columns.insert(0,'WRAPPER') if wrap else df.columns
+    cal_columns = df.columns.insert(0,'WRAPPER') if dash else df.columns
         
     if vars:
         dtypes = Configs.get_dtypes(df)
@@ -101,14 +122,14 @@ def explore_univariate(df, dtypes, vars=None, wrap=True):
         # print('dtypes',dtypes)
         # print('sel.vars',selected_vars)
 
-        # plot_instance = eda(df,wrap=False)
-        # plot_instance.show()   
+        # plot_instance = eda(df,dash=False)
+        # plot_instance.show()
         for column in selected_vars:
             plot_instance = eda(df, column)
             plot_instance.show()
         
     else:
-        # plot_instance = eda(df,wrap=False)
+        # plot_instance = eda(df,dash=False)
         # plot_instance.show()
         for column in cal_columns:
             plot_instance = eda(df, column)
@@ -218,7 +239,7 @@ def cont_comps(ser = None, cfg = None, dtype = None):
             'SUM': np.round(np.nansum(ser), 3)
         })
 
-    elif dt == 'text': 
+    elif dt == 'text':
         w_len = ser.str.len()
         data.update({
         'w_len' : w_len,
@@ -252,7 +273,4 @@ def cont_comps(ser = None, cfg = None, dtype = None):
     
     return data
 
-# data = np.random.randn(1000)  # Replace this with your dataset
-# #compute(data,data).get('col')
-# compute(data,data).get('data')
-# compute(data,data).get('variable_type')
+

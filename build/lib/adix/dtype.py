@@ -31,7 +31,7 @@ def determine_variable_type(data_series, threshold_unique=0.05, threshold_missin
         else:
             return 'continuous', num_unique, unique_values_ratio
             
-    elif pd.api.types.is_object_dtype(data_series):    
+    elif pd.api.types.is_object_dtype(data_series):
         if unique_values_ratio >= threshold_text_ratio:
             return 'text', num_unique, unique_values_ratio
         else:

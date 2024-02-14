@@ -10,10 +10,13 @@ from .wiz import wiz
  
 
 
-def eda(df, col1=None, col2=None, vars=None, cache=None, wrap=True,stats=False):
+def eda(df, col1=None, col2=None, vars=None, cache=None, dash=True,stats=False,corr=False):
+    
+    # Disable cache if dash == 'only'
+    if dash == 'only': cache = False
 
-    # Disable cache if wrap == 'only'
-    Configs.use_eda_cache = wrap != 'only'
+    # Disable cache if dash == 'only'
+    if corr: cache = not corr
 
     
     # Configuration settings
@@ -51,7 +54,7 @@ def eda(df, col1=None, col2=None, vars=None, cache=None, wrap=True,stats=False):
             return WizRenderer(cached_result['data_load'], cached_result['variable_type'], Configs.current_theme)
 
     # Calculate
-    hub = calc(df, col1, col2, cfg, dtypes, vars, wrap)
+    hub = calc(df, col1, col2, cfg, dtypes, vars, dash,stats,corr)
     #print(hub)
     # hub.save()
     if hub is None:  # because plot(df) is recursive

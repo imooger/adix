@@ -3,14 +3,18 @@
 ---
 
 ## _Making Data Science Fun, One Color at a Time!_
+[Documentation](https://imooger.github.io)
+![PyPI - Version](https://img.shields.io/pypi/v/adix)
+![PyPI - Downloads](https://img.shields.io/pypi/dm/adix)
+![PyPI - License](https://img.shields.io/pypi/l/adix)
 
 
 
 
 
 # What is it?
-**adix** (Automatic Data Inspection and eXploration) simplifies Exploratory Data Analysis (EDA) with a single command `ix.eda()`. Experience a streamlined approach to uncovering insights, empowering you to focus on your data without distraction. 
-**Color customization** is at your fingertips, allowing you to tailor your analysis to your exact needs. Explore your data with confidence and efficiency, knowing that **adix** has your back every step of the way.
+**ADIX** is a color-customizable complex data analysis tool that simplifies Exploratory Data Analysis (EDA) with a single command `ix.eda()`. Experience a streamlined approach to uncovering insights, empowering you to focus on your data without distraction. 
+**Color customization** is at your fingertips, allowing you to tailor your analysis to your exact needs. Explore your data with confidence and efficiency, knowing that **adix** (Automatic Data Inspection and eXploration) has your back every step of the way.
 
 
 ![logo](https://raw.githubusercontent.com/imooger/adix/master/assets/main_fade.gif)
@@ -46,7 +50,7 @@ The system is designed for rapid visualization of target values and dataset, fac
 
 ```python
 import adix as ix
-from adix.datasets import load_dataset
+from adix.datasets load_dataset
 
 titanic = load_dataset('titanic')
 ```
@@ -97,7 +101,31 @@ ix.Configs.set_theme('FOREST')
 
 ---
 
-#### 6. Bivariate relationships:  numerical & numerical
+
+#### 6. Heatmap correlation
+This visualization depicts the correlation between all numerical variables within the DataFrame, offering valuable insights into the magnitude and direction of their relationships. 
+
+
+```python
+# Show correlation for the entire DataFrame.
+ix.eda(titanic,corr=True)
+
+```
+<div align="center"><img width="100%" src="https://raw.githubusercontent.com/imooger/adix/master/assets/corr_main.png"/></div>
+
+
+Furthermore, it is possible to use categorical variables since they undergo one-hot encoding to enable their inclusion in correlation analysis. It's recommended to use ANOVA. You can choose whatever variables you want to explore and analyze.
+
+
+```python
+# Show correlation for selected parts of the DataFrame
+ix.eda(titanic.loc[:,['Age','Fare','Sex','Survived']],vars=['categorical','continuous'],corr=True)
+
+```
+<div align="center"><img width="100%" src="https://raw.githubusercontent.com/imooger/adix/master/assets/corr_small.png"/></div>
+
+
+---
 ```python
 ix.eda(titanic,'Age','Fare')
 
@@ -106,7 +134,16 @@ ix.eda(titanic,'Age','Fare')
 
 ---
 
-#### 7. Bivariate relationships:  categorical & numerical
+#### 7. Bivariate relationships:  numerical & numerical
+```python
+ix.eda(titanic,'Age','Fare')
+
+```
+<div align="center"><img width="100%" src="https://raw.githubusercontent.com/imooger/adix/master/assets/c_c.png"/></div>
+
+---
+
+#### 8. Bivariate relationships:  categorical & numerical
 ```python
 ix.eda(titanic,'Sex','Age')
 
@@ -116,7 +153,7 @@ ix.eda(titanic,'Sex','Age')
 
 ---
 
-#### 8. Bivariate relationships:  categorical & categorical
+#### 9. Bivariate relationships:  categorical & categorical
 ```python
 ix.eda(titanic,'Sex','Survived')
 
