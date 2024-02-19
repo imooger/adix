@@ -3,7 +3,6 @@
 ---
 
 ## _Making Data Science Fun, One Color at a Time!_
-[Documentation](https://imooger.github.io)
 ![PyPI - Version](https://img.shields.io/pypi/v/adix)
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/adix)
 ![PyPI - License](https://img.shields.io/pypi/l/adix)
@@ -13,12 +12,18 @@
 
 
 # What is it?
-**ADIX** is a color-customizable complex data analysis tool that simplifies Exploratory Data Analysis (EDA) with a single command `ix.eda()`. Experience a streamlined approach to uncovering insights, empowering you to focus on your data without distraction. 
+**ADIX** is a free, open-source, color-customizable data analysis tool that simplifies Exploratory Data Analysis (EDA) with a single command `ix.eda()`. Experience a streamlined approach to uncovering insights, empowering you to focus on your data without distraction. 
 **Color customization** is at your fingertips, allowing you to tailor your analysis to your exact needs. Explore your data with confidence and efficiency, knowing that **adix** (Automatic Data Inspection and eXploration) has your back every step of the way.
 
 
 ![logo](https://raw.githubusercontent.com/imooger/adix/master/assets/main_fade.gif)
 
+# ⭐️ Ignite the Spark of ADIX!
+
+ If you find ADIX valuable and appreciate the work poured into its development, please show your support by **starring it on GitHub**! 
+ Every star shines a light on this young & rising project, fueling its growth and potential to **empower data exploration for everyone**. 
+ Your recognition truly motivates me to keep refining and expanding its features. 
+ Thank you for considering **becoming part of ADIX's journey**! 🚀
 
 # Main Features
 - **Customizable Themes** 
@@ -35,6 +40,9 @@
   - Delve deeper into numerical data, exploring properties like min-max range, quartiles, average, median, standard deviation, variance, sum, kurtosis, skewness and more.
 - **Univariate and Bivariate Statistics Unveiled**
     - Explore univariate and bivariate insights with adix's versatile visualization options. From bar charts to matrices, and box plots, uncover a multitude of ways to interpret and analyze your data effectively.
+    
+# Documentation
+[Docs](https://imooger.github.io)
 
 # Installation
 The best way to install **adix** (other than from source) is to use pip:
@@ -55,10 +63,10 @@ from adix.datasets load_dataset
 titanic = load_dataset('titanic')
 ```
 
-### 10 minutes to **adix**
+## 10 minutes to **adix**
 
 
-#### 1. Rendering the whole dataframe
+### 1. Rendering the whole dataframe
 ```python
 ix.eda(titanic)
 ```
@@ -67,14 +75,14 @@ ix.eda(titanic)
 ![whole df](https://raw.githubusercontent.com/imooger/adix/master/assets/all_var.gif)
 
 ---
-#### 2. Accesing variables of specific dtype
+### 2. Accesing variables of specific dtype
 Render the DataFrame containing only categorical variables.
 
 ```python
-ix.eda(titanic,val='categorical')
+ix.eda(titanic,vars='categorical')
 ```
 ---
-#### 3. Accesing individual variables
+### 3. Accesing individual variables
 ```python
 ix.eda(titanic,'Age')
 ```
@@ -83,7 +91,7 @@ ix.eda(titanic,'Age')
 ![indv var](https://raw.githubusercontent.com/imooger/adix/master/assets/one_var.gif)
 
 ---
-#### 4. Pandas .loc & .iloc
+### 4. Pandas .loc & .iloc
 An easy way to render only a part of the DataFrame you are interested in.
 
 ```python
@@ -91,7 +99,7 @@ ix.eda(titanic.loc[:10:2,['Age','Pclass','Fare'])
 ```
 ---
 
-#### 5. Changing theme colors
+### 5. Changing theme colors
 ```python
 ix.Configs.get_theme()
 ...
@@ -102,7 +110,7 @@ ix.Configs.set_theme('FOREST')
 ---
 
 
-#### 6. Heatmap correlation
+### 6. Heatmap correlation
 This visualization depicts the correlation between all numerical variables within the DataFrame, offering valuable insights into the magnitude and direction of their relationships. 
 
 
@@ -126,6 +134,8 @@ ix.eda(titanic.loc[:,['Age','Fare','Sex','Survived']],vars=['categorical','conti
 
 
 ---
+
+### 7. Bivariate relationships:  numerical & numerical
 ```python
 ix.eda(titanic,'Age','Fare')
 
@@ -134,16 +144,7 @@ ix.eda(titanic,'Age','Fare')
 
 ---
 
-#### 7. Bivariate relationships:  numerical & numerical
-```python
-ix.eda(titanic,'Age','Fare')
-
-```
-<div align="center"><img width="100%" src="https://raw.githubusercontent.com/imooger/adix/master/assets/c_c.png"/></div>
-
----
-
-#### 8. Bivariate relationships:  categorical & numerical
+### 8. Bivariate relationships:  categorical & numerical
 ```python
 ix.eda(titanic,'Sex','Age')
 
@@ -153,7 +154,7 @@ ix.eda(titanic,'Sex','Age')
 
 ---
 
-#### 9. Bivariate relationships:  categorical & categorical
+### 9. Bivariate relationships:  categorical & categorical
 ```python
 ix.eda(titanic,'Sex','Survived')
 
@@ -173,12 +174,11 @@ MIT
 
 ## Development
 
-**adix** was created and is maintained by Marek Jindrich, a Harvard's CS50 alumnus, and is under continuous development ever since.
-Contributions are welcome, so feel free to contact him, open an issue, or submit a pull request!
+Contributions are welcome, so feel free to contact, open an issue, or submit a pull request!
 
 For accessing the codebase or reporting bugs, please visit the GitHub repository.
 
-This program is provided with WITHOUT ANY WARRANTY. **ADIX** is still under heavy development and there might be hidden bugs.
+This program is provided WITHOUT ANY WARRANTY.  **ADIX** is still under heavy development and there might be hidden bugs.
 
 
 ## Acknowledgement

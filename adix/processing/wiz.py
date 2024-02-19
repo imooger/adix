@@ -20,6 +20,14 @@ from .tables import *
 
 """""" # NEW IMPORTS
 from nltk.tokenize import word_tokenize
+import nltk
+
+if not nltk.downloader.Downloader().is_installed('punkt'):
+    # If not, download the 'punkt' package
+    nltk.download('punkt')
+else:
+    pass
+    #print("Package 'punkt' is already downloaded.")
 """"""
 
 
@@ -1240,16 +1248,17 @@ def triple_box(data, cfg, name=None):
     # Create a histogram
     fig, ax = plt.subplots(figsize=(6, 2))
 
-    values = {'Categorical':data['Categorical'],
-            'Numeric':data['Numeric'],
-            'Text':data['Text'],
-            'Datetime':data['Datetime'],
+    values = {' Categorical':data['Categorical'],
+            ' Numeric':data['Numeric'],
+            ' Text':data['Text'],
+            ' Datetime':data['Datetime'],
     }
     # Assuming 'data' is a list of four values
 
     # Filter out values that are <= 0
     filtered_values = [value for k,value in values.items() if value > 0]
-
+    max_value = max(filtered_values)
+    
     # Custom bar labels (you can modify these as needed)
     bar_labels = [k for k,value in values.items() if value > 0]
     
@@ -1264,7 +1273,7 @@ def triple_box(data, cfg, name=None):
         if value > 0:
             text = f'{label}: {value}'
             # If the value is 1, move the label to the right side
-            if value == 1:
+            if (value / max_value ) < 0.16:
                 ax.text(value + 0.2, bar.get_y() + bar.get_height() / 2, text, va='center', ha='left', color=cfg['dash_bars_text_color'])
             else:
                 ax.text(value / 2, bar.get_y() + bar.get_height() / 2, text, va='center', ha='center', color=cfg['dash_bars_text_color'])
@@ -1311,10 +1320,16 @@ def correlation_plot(corr_matrix):
     xtick_labels = [label[:7] + '.' if len(label) > 7 else label for label in xtick_labels]
     heatmap.set_xticklabels(xtick_labels)
 
+    # Truncate y-axis tick labels if their length exceeds 12 characters
+    yticks = heatmap.get_yticklabels()
+    ytick_labels = [label.get_text() for label in yticks]  # Extract text from Text objects
+    ytick_labels = [label[:11] + '.' if len(label) > 11 else label for label in ytick_labels]
+    heatmap.set_yticklabels(ytick_labels)
+
     # Set font color for axis labels and title
-    plt.title('Correlation', color='#a9a9a9')
-    plt.xlabel('Variables', color='#a9a9a9')
-    plt.ylabel('Variables', color='#a9a9a9')
+    plt.title('Correlation Plot', color='#a9a9a9')
+#    plt.xlabel('Variables', color='#a9a9a9')
+#    plt.ylabel('Variables', color='#a9a9a9')
 
     # Set font color for ticks
     plt.xticks(color='#a9a9a9')

@@ -11,12 +11,12 @@ with (source_root / "README.md").open(encoding="utf-8") as f:
 
 setup(
     name="adix",
-    version="0.2.0",
+    version="0.2.5",
     project_urls={
         'Homepage': 'https://imooger.github.io',
 #        'Changelog': 'https://github.com/your-username/your-package-name/blob/main/CHANGELOG.md',
 #        'Discussions': 'https://github.com/your-username/your-package-name/discussions',
-        'Documentation': 'https://imooger.github.io/docs',
+        'Documentation': 'https://imooger.github.io',
         'Repository': 'https://github.com/imooger/adix',
         'Bug Tracker': 'https://github.com/imooger/adix/issues',
     },
