@@ -11,7 +11,7 @@ with (source_root / "README.md").open(encoding="utf-8") as f:
 
 setup(
     name="adix",
-    version="0.2.5",
+    version="0.2.6",
     project_urls={
         'Homepage': 'https://imooger.github.io',
 #        'Changelog': 'https://github.com/your-username/your-package-name/blob/main/CHANGELOG.md',

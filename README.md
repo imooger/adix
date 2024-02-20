@@ -18,12 +18,7 @@
 
 ![logo](https://raw.githubusercontent.com/imooger/adix/master/assets/main_fade.gif)
 
-# ⭐️ Ignite the Spark of ADIX!
-
- If you find ADIX valuable and appreciate the work poured into its development, please show your support by **starring it on GitHub**! 
- Every star shines a light on this young & rising project, fueling its growth and potential to **empower data exploration for everyone**. 
- Your recognition truly motivates me to keep refining and expanding its features. 
- Thank you for considering **becoming part of ADIX's journey**! 🚀
+## ⭐️ if you like the project, please consider giving it a star, thank you :)
 
 # Main Features
 - **Customizable Themes** 
